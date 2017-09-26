@@ -1,0 +1,697 @@
+\documentclass{tlp_mod}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{url}
+
+\def\G{\Gamma}
+\def\D{\Delta}
+\def\seq{\Rightarrow}
+\def\o{\overline}
+\def\bp{\textbf{p}}
+\def\ar{\leftarrow}
+\def\rar{\rightarrow}
+\def\lrar{\leftrightarrow}
+\def\beq{\begin{equation}}
+\def\eeq#1{\label{#1}\end{equation}}
+\def\ba{\begin{array}}
+\def\ea{\end{array}}
+\def\i#1{\hbox{\it #1\/}}
+\def\is#1{{\hbox{\scriptsize {\it #1\/}}}}
+\def\C{{\cal C}}
+\def\no{\i{not}}
+\def\iif{\hbox{\bf if}}
+\def\vars{\hbox{\rm Vars}}
+\def\gvars{\hbox{\rm GVars}}
+\def\lvars{\hbox{\rm LVars}}
+\def\dom{\hbox{\rm Dom}}
+\def\after{\hbox{\bf after}}
+\def\ifcons{\hbox{\bf if}\;\!\hbox{\bf cons}}
+\def\causes{\hbox{\bf causes}}
+\def\inertial{\hbox{\bf inertial}}
+\def\default{\hbox{\bf default}}
+\def\constr{\hbox{\bf constraint}}
+\def\imp{\hbox{\bf impossible}}
+\def\nonex{\hbox{\bf nonexecutable}}
+\def\pn{\hbox{\it PN}}
+\def\ps{\hbox{\it PS}}
+\def\mv{\hbox{\it MV}}
+\def\choice#1{\i{Choice}(#1)}
+\def\s{\hbox{\it SL}}
+\def\d{\hbox{\it DL}}
+\def\sm{\hbox{SM}}
+\def\gr{\hbox{Gr}}
+\def\r#1#2{\frac{\textstyle #1}{\textstyle #2}}
+\hyphenation{lif-schitz}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+
+
+\title[Online appendix]{{\large\textnormal{Online appendix for the paper}}   \\
+Abstract Gringo
+\\
+{\large\textnormal{published in Theory and Practice of Logic Programming}}
+}
+
+\author[Gebser, Harrison, Kaminski, Lifschitz, and Schaub]
+{Martin Gebser, Amelia Harrison, Roland Kaminski,
+Vladimir Lifschitz and Torsten Schaub}
+
+
+\begin{document}
+
+\appendix
+
+\title[Online appendix]{{\large\textnormal{Online appendix for the paper}}   \\
+Abstract Gringo
+\\
+{\large\textnormal{published in Theory and Practice of Logic Programming}}
+}
+\author[Gebser, Harrison, Kaminski, Lifschitz, and Schaub]
+{MARTIN GEBSER\\
+Aalto University, HIIT, Finland\\
+University of Potsdam, Germany\\
+gebser@cs.uni-potsdam.de\\
+\and
+AMELIA HARRISON\\
+Univeristy of Texas at Austin, USA\\
+ameliaj@cs.utexas.edu\\
+\and
+ROLAND KAMINSKI\\
+University of Potsdam, Germany\\
+kaminski@cs.uni-potsdam.de\\
+\and
+VLADIMIR LIFSCHITZ\\
+Univeristy of Texas at Austin, USA\\
+vl@cs.utexas.edu\\
+\and
+TORSTEN SCHAUB\\
+%\thanks{Affiliated with Simon Fraser 
+%University, Canada, and IIIS 
+%Griffith University, Australia.}\\
+University of Potsdam, Germany\\
+INRIA Rennes, France\\
+torsten@cs.uni-potsdam.de\\
+}
+
+%\submitted {1 January 2003}
+%\revised {1 January 2003}
+%\accepted{1 January 2003}
+
+\makeatletter
+{%
+  \newpage
+  \begingroup
+    \newpage
+    \global\@topnum\z@
+    \titlefntrue
+    \def\thefootnote{\@fnsymbol\c@footnote}%
+    \def\@makefnmark{\hbox{$\@thefnmark$}}%
+    \thispagestyle{titlepage}\@thanks
+  \endgroup
+  \vspace*{-15\p@}%
+  {\centering \sloppy
+   \pe@rl{#1}%
+   {\normalfont\LARGE\itshape \@title\par}%
+   \vskip 16\p@
+   {\normalfont\normalsize\rmfamily
+    \let\authorbreak\auth@rbreak
+    \let\and\@nd
+    \b@at
+      \@author
+    \end{author@tabular}%
+   \par}%
+%   \ifprodtf
+     %\vskip 10pt%
+     %{{\affilsize\it submitted \@submitted; revised \@revised; accepted \@accepted}}\par
+%   \fi
+  }%
+ % \vskip 18\p@ \@plus 2\p@ \@minus 1\p@
+}
+\makeatother
+
+\section*{Proofs of Theorems~1--3}
+\label{app:proofs}
+
+\begin{proof*}[Proof of Theorem~1]
+%\medskip\noindent {\bf Proof of Theorem~\ref{lem:equality}} $\;$
+Because $s$ is interval-free, 
+$[s]$ is either empty or a singleton. {\it Case 1:} The set $[s]$ is 
+empty. Then no set $\Delta \subseteq A$ justifies any of the aggregate atoms
+$E$, $E_{\leq}$, $E_{\geq}$. Consequently, each of the formulas
+$\tau E$, $\tau E_{\leq}$, $\tau E_{\geq}$ is the conjunction of implications
+(22) for all sets $\Delta \subseteq A$. 
+{\it Case 2:} The set $[s]$ is a singleton set $\{t\}$, where $t$ is a precomputed term. 
+Then, we will show that the set of conjunctive terms of $\tau E$ is the union
+of the sets of conjunctive terms of $\tau E_{\leq}$ and $\tau E_{\geq}$. 
+% Consider the set $A$ defined in Section \ref{sem:ag}.
+For any subset $\Delta$ of $A$,
+\begin{center}
+\begin{tabular}{l  l}
+    & (22) is a conjunctive term of $\tau E$ \\
+iff & $\Delta$ does not justify $E$ \\
+iff & $\widehat{\alpha}[\Delta] \not = t$ \\
+iff & $\widehat{\alpha}[\Delta] < t$ or $\widehat{\alpha}[\Delta] > t$ \\
+iff & $\Delta$ does not justify $E_{\ge}$ or $\Delta$ does not justify
+$E_{\le}$\\
+iff & (22) is a conjunctive term of $\tau E_{\ge}$ or of
+$\tau E_{\le}$\\
+iff & (22) is a conjunctive term of $\tau E_{\le} \land \tau E_{\ge}.$ 
+\end{tabular}
+\end{center}
+\end{proof*}
+
+\begin{proof*}[Proof of Theorem~2]
+%\medskip\noindent {\bf Proof of Theorem~\ref{lem:geq}} $\;$
+Since~$E$ is monotone,
+the antecedent of~(22) can be dropped
+(Section~5.1), so that $\tau E$ is strongly equivalent to
+%\beq
+\[
+  \bigwedge_{ \Delta \subseteq A \atop \lvert [\Delta] \rvert < m}
+  \bigvee_{(i,{\bf r}) \in A\setminus\Delta}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+\tag{25}
+%\eeq
+\label{mono_geq}
+\]
+To derive (25) from (22) in HT\/$^\infty$,
+assume (23). We will reason by cases, with one case 
+corresponding to each disjunctive term 
+%\beq
+\[
+  \bigwedge_{(i,{\bf r}) \in \Delta}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r})
+\tag{26}
+%\eeq
+\label{dterm}
+\]
+of (23). 
+Let $\Delta'$ be a subset of $A$ such that 
+$\lvert [\Delta']\rvert < m$.  
+We will show that the conjunctive term 
+of (25) corresponding to $\Delta'$ can be derived from 
+(26).  Since 
+%\beq
+\[
+\lvert [\Delta'] \rvert < m = \lvert [\Delta]\rvert,
+\tag{27}
+%\eeq
+\label{ineq}
+\]
+there exists a pair $(i, {\bf r})$ that is an element of $\Delta$ but 
+not an element of $\Delta'$. Indeed, if \hbox{$\Delta \subseteq \Delta'$} then 
+$[\Delta] \subseteq [\Delta']$, which contradicts (27). 
+Since $(i, {\bf r}) \in \Delta$, from~(26) 
+we can derive $\tau_{\lor}(({\bf L}_i)_{\bf r}^{{\bf x}_i})$. Since
+$(i, {\bf r}) \in A \setminus \Delta'$, we can further derive 
+$$
+ \bigvee_{(i,{\bf r}) \in A\setminus\Delta'}
+ \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+$$
+It follows that each conjunctive term of $(25)$
+can be derived from (26). 
+
+We will prove by induction on $m$ that   
+(23) can be derived from (25) in HT\/$^\infty$.
+Base case: when $m = 0$ the disjunctive term of (23) 
+corresponding to the empty $\Delta$ is $\top$. 
+Inductive step: assume that (23) can be derived from 
+(25), and assume 
+%\beq
+\[
+  \bigwedge_{\Delta \subseteq A \atop \lvert [\Delta]\rvert < m + 1}  
+  \bigvee_{(i,{\bf r}) \in A\setminus\Delta}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+%\eeq
+\tag{28}
+\label{monok}
+\]
+From (28) we can derive (25), and consequently
+(23). 
+Now we reason by cases, with one case corresponding to each disjunctive
+term of (23). 
+Assume 
+%\beq
+\[
+  \bigwedge_{(i,{\bf r}) \in \Sigma}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r})
+%\eeq
+\tag{29}
+\label{dterm2}
+\]
+where $\Sigma$ is a subset of $A$ such that $\lvert [\Sigma]\rvert = m$.
+Consider the set  
+$$\Sigma' = \{(i, {\bf r}) : [({\bf t}_i)^{{\bf x}_i}_{\bf r}] 
+\subseteq [\Sigma]\}.$$
+By the definition of $[\Sigma]$, for any $(i, {\bf r}) \in \Sigma$, 
+$[({\bf t}_i)^{{\bf x}_i}_{\bf r}] \subseteq [\Sigma]$. So $\Sigma \subseteq
+\Sigma'$. It follows that $[\Sigma] \subseteq [\Sigma']$.
+On the other hand,  
+$$[\Sigma'] =  
+\bigcup_{(i, {\bf r}) \in \Sigma'} [({\bf t}_i)^{{\bf x}_i}_{\bf r}] =
+\bigcup_{(i, {\bf r})\;:\;
+[({\bf t}_i)^{{\bf x}_i}_{\bf r}] \subseteq [\Sigma]}
+[({\bf t}_i)^{{\bf x}_i}_{{\bf r}}] \subseteq [\Sigma].$$
+Consequently $[\Sigma] = [\Sigma']$, and
+$\lvert [\Sigma'] \rvert = \lvert [\Sigma] \rvert = m.$ 
+From (28),
+%\beq
+\[
+  \bigvee_{(i,{\bf r}) \in A\setminus\Sigma'}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+%\eeq
+\tag{30}
+\label{monok_res}
+\]
+Again, we reason by cases, with one case corresponding to each disjunctive
+term of (30). Assume $\tau_{\lor}(({\bf L}_j)^
+{{\bf x}_j}_{\bf s})$, where $(j, {\bf s}) \in A \setminus \Sigma'$.
+Combining assumption (29) and $\tau_{\lor}(({\bf L}_j)^
+{{\bf x}_j}_{\bf s})$, we derive 
+%\beq
+\[
+  \bigwedge_{(i, {\bf r}) \in \Sigma \cup \{(j,{\bf s})\}}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}). 
+%\eeq
+\tag{31}
+\label{combin}
+\]
+Consider the set $[\Sigma \cup \{(j, {\bf s})\}]$, that is,
+%\beq
+\[
+[\Sigma] \cup [({\bf t}_j)^{{\bf x}_j}_{\bf s}].
+%\eeq
+\tag{32}
+\label{31} 
+\]
+Recall that the cardinality
+of $[\Sigma]$ is $m$. Since ${\bf t}_j$ is interval-free, 
+the cardinality of $[({\bf t}_j)^{{\bf x}_j}_{\bf s}]$ is at most $1$. 
+Furthermore,  
+since $(j, {\bf s}) \not \in \Sigma'$ it follows that 
+$$[({\bf t}_j)^{{\bf x}_j}_{\bf s}] \not \subseteq [\Sigma],$$
+so that $[({\bf t}_j)^{{\bf x}_j}_{\bf s}]$ is nonempty.
+Consequently,
+the set is a singleton,  
+and therefore $[\Sigma]$ is disjoint from it. 
+It follows that the cardinality of (\ref{31}) is $m+1$. 
+%\hbox{$\lvert [\Sigma \cup \{(j, {\bf s})\}] \rvert = m+1$}.
+So from (\ref{combin}) we can derive 
+$$
+  \bigvee_{\Delta\subseteq A \atop \lvert [\Delta] \rvert = m+1}  
+  \bigwedge_{(i,{\bf r}) \in \Delta}
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+$$
+\end{proof*}
+
+\begin{proof*}[Proof of Theorem~3]
+%\noindent {\bf Proof of Theorem~\ref{lem:leq}}$\;$
+Since the
+consequent of~(22) can be replaced in this case by~$\bot$,
+$\tau E$ is strongly equivalent to
+%\beq
+\[
+  \bigwedge_{\Delta \subseteq A \atop \lvert [\Delta] \rvert > m}  
+  \neg \bigwedge_{(i, {\bf r}) \in\Delta} 
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+%\eeq
+\tag{33}
+\label{trans}
+\]
+Every conjunctive term of (24) is a conjunctive term of  
+(\ref{trans}). To derive (\ref{trans}) from (24), consider a 
+set $\Delta$ such that $\lvert [\Delta] \rvert > m$. 
+Let $f(i,{\bf r})$ stand for the set
+$[({\bf t}_i)^{{\bf x}_i}_{\bf r}]$. Since each ${\bf t}_i$ is 
+interval-free, this set is either empty or a singleton. 
+%So $[\Delta]$ is the union of the singletons $f(i,{\bf r})$ 
+%for all $(i,{\bf r})$ from $\Delta$. 
+Let ${\bf s}_1,\dots,{\bf s}_{m+1}$ 
+be $m+1$ distinct elements of $[\Delta]$.  
+Choose elements $(i_1,{\bf r}_1),\dots,(i_{m+1},{\bf r}_{m+1})$ of 
+$\Delta$ such that each $s_k$ belongs to $f(i_k,{\bf r}_k)$, and let 
+$\Delta'$ be $\{(i_1,{\bf r}_1),\dots,(i_{m+1},{\bf r}_{m+1})\}$.
+The cardinality of $[\Delta']$ is at least $m+1$, because this set 
+includes ${\bf s}_1,\dots,{\bf s}_{m+1}$.  On the other hand, it is at 
+most $m+1$, because this set is the union of $m+1$ sets of cardinality at 
+most $1$.  
+Consequently, $\lvert [\Delta']\rvert = m+1$.  From (24) 
+we can conclude in HT\/$^\infty$ that  
+%\beq
+\[
+  \neg \bigwedge_{(i, {\bf r}) \in\Delta'} \tau_{\lor}
+  (({\bf L}_i)^{{\bf x}_i}_{\bf r}).
+%\eeq
+\tag{34}
+\label{cterm}
+\]
+Then the conjunctive term
+$$\neg \bigwedge_{(i, {\bf r}) \in\Delta} 
+  \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r})$$
+of~(\ref{trans}) follows, because $\Delta' \subseteq \Delta$.\end{proof*} 
+
+\section*{Correctness of the $n$-Queens Program} \label{sec:nqueens}
+
+In this section, we prove the correctness of the program $K$,
+consisting of rules $R_1,\dots,R_7$ (Sections~2.3 and~3).
+
+The $n$-queens problem involves placing $n$ queens on an $n \times n$ 
+chess board such that no two queens threaten each other. We will represent 
+squares by pairs of integers $(i, j)$ where 
+\hbox{$1 \leq i,j \leq n$}. Two squares $(i_1, j_1)$ and $(i_2, j_2)$ are said 
+to be in the same row if $i_1 = i_2$; in the same column
+if $j_1 = j_2$; and in the same diagonal if $\lvert i_1 - i_2 \rvert = 
+\lvert j_1 - j_2 \rvert$.
+A set $Q$ of $n$ squares is a {\sl solution} to the $n$-queens problem if
+no two elements of $Q$ are in the same row,  
+in the same column, 
+or in the same diagonal.
+
+For any stable model $I$ of $K$, by $Q_I$ we denote the set of 
+pairs $(i, j)$ such that $q(\o i, \o j) \in I$.
+
+\medskip
+
+\noindent\emph{Theorem 4}\\
+For each stable model $I$ of $K$, $Q_I$ is a 
+solution to the $n$-queens problem.  Furthermore, for each solution $Q$ to 
+the $n$-queens problem there is exactly one stable model $I$ of $K$ such that
+$Q_I = Q$.
+
+\medskip
+
+\subsection*{Review: Supported Models and Constraints}
+
+We start by reviewing two familiar facts that will be 
+useful in proving Theorem~4.  
+
+An {\sl infinitary program} is a conjunction of (possibly infinitely 
+many) infinitary formulas of the form $G \rar A$, where $A$ is an atom.
+We say that an interpretation $I$ is 
+{\sl supported} by an infinitary program $\Pi$ if each atom $A$ from $I$ is 
+the consequent of a conjunctive term~$G\rar A$ of $\Pi$ such that $I\models G$. 
+\citeANP{lif13a} \citeyear{lif13a} give a condition, ``tightness on an 
+interpretation,''  under which the stable models of
+an infinitary program are identical to its supported models. 
+Proposition~\ref{thm:etight} below
+gives a simpler condition of this kind that is sufficient for our purposes. 
+
+We say that an atom $A$ {\sl occurs nonnegated in a formula $F$} if 
+\begin{itemize}
+\item $F$ is $A$, or 
+\item $F$ is of the form $\mathcal{H}^\land$ or $\mathcal{H}^\lor$ and $A$ occurs nonnegated in at least one element of $\mathcal{H}$, or
+\item $F$ is of the form $G \rar H$, where $H$ is different from $\bot$, and 
+$A$ occurs nonnegated in $G$ or in $H$. 
+\end{itemize}
+It is clear, for instance, that no atom occurs nonnegated in a formula of the
+form $\neg F$. 
+
+The {\sl positive dependency graph} of an infinitary program $\Pi$ is the
+directed graph containing a vertex for each atom occuring in $\Pi$, and an 
+edge from $A$ to $B$ for every conjunctive term $G \rar A$ of $\Pi$ and every
+atom $B$ that occurs nonnegated in $G$.
+We say that an infinitary program $\Pi$ is {\sl extratight} 
+if the positive dependency graph of $\Pi$ contains no infinite paths.  
+ 
+The following fact is immediate from \cite[Lemma 2]{lif13a}. 
+
+\begin{proposition}\label{thm:etight}
+For any model $I$ of an extratight infinitary program $\Pi$, $I$ is 
+stable iff $I$ is supported by~$\Pi$.
+\end{proposition}
+
+A {\sl constraint} is an infinitary formula of the form $\neg F$
+(which is shorthand for $F\rar\bot$). The 
+following theorem is a straightforward generalization of 
+Proposition 4  from \cite{fer05e}. 
+
+\begin{proposition}\label{thm:cons}
+Let $\mathcal{H}_1$  be a set of infinitary formulas and $\mathcal{H}_2$ be
+a set of constraints. A set $I$ of 
+atoms  is a stable model of $\mathcal{H}_1 \cup \mathcal{H}_2$ iff $I$ is a 
+stable model of $\mathcal{H}_1$ and satisfies all formulas in~$\mathcal{H}_2$.
+\end{proposition}
+
+\begin{proof*}
+%\noindent {\bf Proof} $\;$ 
+{\em Case 1:} Every formula in $\mathcal{H}_1 \cup \mathcal{H}_2$ is satisfied 
+by $I$. For each formula $\neg F$ in $\mathcal{H}_2$, $I$ does not satisfy $F$.
+So the reduct of each formula in $\mathcal{H}_2$ w.r.t. $I$ is $\neg \bot$. 
+It follows that the set of reducts of all formulas in 
+$\mathcal{H}_1 \cup \mathcal{H}_2$ 
+is satisfied by the same interpretations as the set of reducts of all
+formulas in $\mathcal{H}_1$.  Consequently, $I$ is minimal among the sets 
+satisfying the reducts of all formulas from 
+$\mathcal{H}_1 \cup \mathcal{H}_2$ iff it is minimal among the sets 
+satisfying the reducts of all formulas from $\mathcal{H}_1$. {\em Case~2: } 
+Some formula $F$ in $\mathcal{H}_1 \cup \mathcal{H}_2$ is not satisfied by $I$.
+Then $I$ is not a stable model of $\mathcal{H}_1 \cup \mathcal{H}_2$.  
+If $F \in \mathcal{H}_1$ then $I$ is not a stable model of $\mathcal{H}_1$.  
+Otherwise, it is not true that $I$ satisfies all formulas in $\mathcal{H}_2$. 
+\end{proof*}
+
+\subsection*{Proof of Theorem 4}
+
+To simplify notation, we will identify each set $Q$ of squares with the set of 
+atoms $q(\o i, \o j)$ where \hbox{$(i, j) \in Q$}. By $D_n$ we denote the set 
+of atoms of the forms $\i{d1}(\o i, \o j, \o{i-j+n})$ and $\i{d2}(\o i, \o j, 
+\o{i+j-1})$ for all $i,j$ from $\{1,\dots,n\}$. Recall that the rules
+of the program $K$ are denoted by $R_1,\dots,R_7$. 
+
+\begin{lemma}\label{lem:sup}
+A set of atoms is a stable model of 
+%\beq
+\[
+\tau R_1 \cup \tau R_4 \cup \tau R_5
+%\eeq
+\tag{35}
+\label{supset}
+\]
+iff it is of the form $Q \cup D_n$ where $Q$ is a set of squares. 
+\end{lemma}
+
+\begin{proof*}
+%\noindent {\bf Proof} $\;$ 
+We can turn (\ref{supset}) into a strongly
+equivalent infinitary program as follows. The result of applying $\tau$ to 
+$R_1$ is (21). 
+%the conjunction of the formulas 
+%$$
+%\beq
+%  q(\o i, \o j) \lor \neg q(\o i, \o j) 
+%\eeq{tauR_1}
+%$$
+%$(1 \leq i,j \leq n)$, 
+%which are strongly equivalent to 
+Each conjunctive term in this formula is strongly equivalent to 
+%\beq
+\[
+\neg \neg q(\o i, \o j) \rar q(\o i, \o j). 
+%\eeq
+\tag{36}
+\label{etightR_1}
+\]
+The set $\tau R_4$ is strongly equivalent to   
+the set of formulas
+%\beq
+\[
+  \top \rar d1(\o i,\o j,\o{i-j+n}) 
+%\eeq
+\tag{37}
+\label{r4}
+\]
+($1 \leq i,j \leq n$).
+(We take into account that $\tau(\o i = \o 1..\o n)$ is equivalent to
+$\top$ if $1 \leq i \leq n$ and to~$\bot$ otherwise, and similarly for $j$.) 
+Similarly, $\tau R_5$ is strongly equivalent to the set of formulas
+%\beq
+\[
+  \top \rar d2(\o i,\o j,\o{i+j-1})
+%\eeq
+\tag{38}
+\label{r5}
+\]
+$(1 \leq i,j \leq n)$.
+Consequently, (\ref{supset}) is strongly equivalent to the conjunction $H$ of 
+formulas (\ref{etightR_1})--(\ref{r5}). 
+It is easy to check that $H$ is an extratight infinitary program, so that
+by Proposition~\ref{thm:etight} its stable models are identical to its 
+supported models. 
+A set $I$ of atoms is a model of $H$ iff $D_n \subseteq I$. Furthermore, 
+$I$ is supported iff every element of $I$ has the form $q(\o i, \o j)$ or 
+is an element of $D_n$. Consequently, supported models of $H$ are sets of the 
+form $Q \cup D_n$ where $Q$ is a set of squares.  
+\end{proof*}
+
+\begin{lemma}\label{lem:main}
+A set $I$ of atoms is a stable model of $\tau K$ iff
+it has the form $Q \cup D_n$, where $Q$ is a solution to the $n$-queens 
+problem.
+\end{lemma}
+
+%\noindent{\bf Proof} \;\;  
+\begin{proof*}
+Let $\mathcal{H}_1$ be (\ref{supset}) and $\mathcal{H}_2$ be 
+$$
+\tau R_2 \cup \tau R_3 \cup \tau R_6 \cup \tau R_7.
+$$
+All formulas in $\mathcal{H}_2$ are constraints. Consequently, 
+by Proposition~\ref{thm:cons}, $I$ is a stable 
+model of $\tau K$ iff it is a stable model of $\mathcal{H}_1$ and satisfies all formulas in $\mathcal{H}_2$.  
+By Lemma~\ref{lem:sup}, $I$ is a stable model of $\mathcal{H}_1$ iff it is 
+of the form $Q \cup D_n$, where $Q$ is a set of squares. It remains to show 
+that a set $I$ of the form $Q \cup D_n$ satisfies all formulas in 
+$\mathcal{H}_2$ iff $Q$ is a solution to the $n$-queens problem.  
+Specifically, we will show that for any set $I$ of the form $Q \cup D_n$
+\begin{itemize}
+\item[(i)] $I$ satisfies $\tau R_2$ iff for all $i \in \{1,\dots,n\}$, $I$ 
+contains exactly one atom of the form $q(\o i, \o j)$;
+\item[(ii)] $I$ satisfies $\tau R_3$ iff~for all $j \in \{1,\dots,n\}$, $I$ 
+contains exactly one atom of the form $q(\o i, \o j)$;
+\item[(iii)] $I$ satisfies $\tau R_6 \cup \tau R_7$ iff no two squares in $I$
+are in the same diagonal.
+\end{itemize}
+
+To prove (i), note first that $\tau R_2$ is equivalent to  the set of formulas
+$$
+\neg \neg \left (\tau(\i{count}\{Y: q(\o i,Y)\} = \o 1) \right )
+$$
+$(1 \leq i \leq n)$. By Theorem~1, this set is strongly 
+equivalent to the set of formulas 
+%\beq
+\[
+\neg \neg \left (\tau(\i{count}\{Y:
+  q(\o i,Y)\} \leq \o 1) \land \tau(\i{count}\{Y: q(\o i,Y)\} \geq \o 1) 
+  \right ).
+%\eeq
+\tag{39}
+\label{r2expand}  
+\]
+By Theorem~3 and the comment at the end of Section~5.3,
+the result of applying $\tau$ to 
+the first aggregate atom in (\ref{r2expand}) is strongly equivalent to  
+$$
+\bigwedge_{\Delta \subseteq A \atop \lvert \Delta \rvert = 2} \neg 
+  \bigwedge_{(1, r) \in \Delta} q(\o i, r).
+$$
+This formula can be written as   
+$$
+\bigwedge_{\Sigma \subseteq P \atop \lvert \Sigma \rvert = 2} \neg 
+  \bigwedge_{r \in \Sigma} q(\o i, r),
+$$
+where $P$ is the set of precomputed terms. 
+It is easy to see that $I$ satisfies this formula iff it contains at most 
+one atom of the form  $q(\o i,r)$. On the other hand, by Theorem~2, 
+the result of applying $\tau$ to the second aggregate atom in (\ref{r2expand}) 
+is strongly equivalent to 
+$$
+  \bigvee_{\Delta \subseteq A \atop \lvert \Delta \rvert = 1} 
+  \bigwedge_{(1, r) \in\Delta} q(\o i, r). 
+$$
+Similar reasoning shows that $I$ satisfies this formula iff it 
+contains at least
+one atom of the form  $q(\o i,r)$. Since $I = Q \cup D_n$,  
+$r$ in this atom is one of $\o 1,\dots, \o n$.  
+
+Claim (ii) is proved in a similar way.  
+
+To prove (iii), note first that two squares 
+$(\o{i_1}, \o{j_1}), (\o{i_2}, \o{j_2})$ are in the same diagonal iff
+there exists a $k \in \{1, \dots, 2n-1\}$ such that 
+%\beq
+\[
+d1(\o i_1, \o j_1, \o k), d1(\o i_2, \o j_2, \o k) \in D_n
+%\eeq
+\tag{40}
+\label{c1} 
+\]
+or
+%\beq  
+\[
+d2(\o i_1, \o j_1, \o k), d2(\o i_2, \o j_2, \o k) \in D_n. 
+%\eeq
+\tag{41}
+\label{c2}
+\]
+We will show that a set $I$ of the form $Q \cup D_n$ does not satisfy 
+$\tau R_6$ iff 
+there exists a $k$ such that~(\ref{c1}) holds for two distinct elements 
+$q(\o{i_1}, \o{j_1}), q(\o{i_2}, \o{j_2}) \in Q$, and that it does not  
+satisfy 
+$\tau R_7$ iff there exists a $k$ such that (\ref{c2}) holds for such two
+elements.  The result of applying $\tau$ to $R_6$ is strongly 
+equivalent to the set of formulas 
+%\beq
+\[
+  \neg \tau(2 \leq \i{count}\{\o 0, q(X,Y) : q(X,Y), d1(X,Y,\o k)\})
+%\eeq
+\tag{42}
+\label{tauR_6}
+\]
+$(1 \leq k \leq 2n-1)$. Formula (\ref{tauR_6}) is identical to 
+$$
+\neg \tau ( \i{count}\{X,Y : q(X,Y), d1(X,Y,\o k)\} \geq 2 ). 
+$$ 
+In view of Theorem~2, it follows that it is strongly equivalent
+to 
+$$ 
+\neg \bigvee_{\Delta \subseteq A \atop \lvert \Delta
+ \rvert = 2} \bigwedge_{(1, (r,s)) \in \Delta} (q(r, s) \land d1(r, s,  \o k))
+$$
+$(1 \leq k \leq 2n-1)$. This formula can be written as  
+%\beq
+\[
+ \neg \bigvee_{\Sigma \subseteq P \times P \atop \lvert \Sigma 
+ \rvert = 2} \bigwedge_{(r,s) \in \Sigma} (q(r, s) \land d1(r, s,  \o k)).
+%\eeq
+\tag{43}
+\label{r6simp}\]
+For any set $Q$ of squares, 
+\begin{center}
+\begin{tabular}{l  l}
+    & $Q \cup D_n$ does not satisfy (\ref{r6simp}) \\
+iff & there exist two distinct pairs $(r_1, s_1), (r_2, s_2)$ from 
+    $P \times P$ such that\\
+    & $q(r_1,s_1),q(r_2, s_2) \in Q$ and $d1(r_1,s_1,\o k), 
+    d1(r_2, s_2, \o k) \in D_n$\\
+iff & there exist two distinct squares $(\o i_1, \o j_1), (\o i_2, \o j_2) \in 
+    Q$ such that (\ref{c1}) holds.
+\end{tabular}
+\end{center}
+
+The claim about (\ref{c2}) is proved in a similar way. 
+\end{proof*}
+%\medskip
+
+Theorem~4 is immediate from the lemma. 
+
+% \bibliographystyle{acmtrans}
+% \bibliography{bib}
+
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Ferraris and Lifschitz}{Ferraris and
+  Lifschitz}{2005}]{fer05e}
+{\sc Ferraris, P.} {\sc and} {\sc Lifschitz, V.} 2005.
+\newblock Mathematical foundations of answer set programming.
+\newblock In {\em We Will Show Them! Essays in Honour of Dov Gabbay}. King's
+  College Publications, 615--664.
+
+\bibitem[\protect\citeauthoryear{Lifschitz and Yang}{Lifschitz and
+  Yang}{2013}]{lif13a}
+{\sc Lifschitz, V.} {\sc and} {\sc Yang, F.} 2013.
+\newblock Lloyd-{T}opor completion and general stable models.
+\newblock {\em Theory and Practice of Logic Programming\/}~{\em 13,\/}~4--5.
+
+\end{thebibliography}
+
+
+\end{document}
+
+
+
