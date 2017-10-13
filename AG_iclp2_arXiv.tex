@@ -54,7 +54,7 @@
 
 \title{\bf Abstract Gringo}
 \author[Gebser et al.]
-{MARTIN GEBSER\thanks{Supported by AoF (grant 
+{MARTIN GEBSER\thanks{Supported by AoF (grant
 251170) and DFG (grants SCHA 550/8 and 550/9).}
 \\
 Aalto University, HIIT, Finland\\
@@ -74,8 +74,8 @@ VLADIMIR LIFSCHITZ$\dagger$\\
 Univeristy of Texas at Austin, USA\\
 vl@cs.utexas.edu\\
 \and
-TORSTEN SCHAUB$\highast$\thanks{Affiliated with Simon Fraser 
-University, Canada, and IIIS 
+TORSTEN SCHAUB$\highast$\thanks{Affiliated with Simon Fraser
+University, Canada, and IIIS
 Griffith University, Australia.}\\
 University of Potsdam, Germany\\
 INRIA Rennes, France\\
@@ -89,14 +89,14 @@ torsten@cs.uni-potsdam.de\\
 This paper defines the syntax and semantics of the input language of the
 ASP grounder {\sc gringo}.  The definition covers several constructs
 that were not discussed in earlier work on the semantics of that language,
-including intervals, pools, 
+including intervals, pools,
 division of integers, aggregates with non-numeric values,
 and lparse-style aggregate expressions.  The definition is abstract in the
 sense that it disregards some details related to representing programs by
 strings of ASCII characters.
 It serves as a specification for {\sc gringo} from Version 4.5 on.
 
-To appear in Theory and Practice of Logic Programming (TPLP), Proceedings of 
+To appear in Theory and Practice of Logic Programming (TPLP), Proceedings of
 ICLP 2015.
 \end{abstract}
 
@@ -113,24 +113,24 @@ That subset does not include, however, several constructs that are frequently
 used in ASP programs.  One such construct is integer intervals.
 Take, for instance, the ASP solution
 to the $n$-queens problem shown in Table~\ref{Kappa}. (It is similar to one of
-the solutions in the language of Version~3 presented by \citeANP{geb11b} 
+the solutions in the language of Version~3 presented by \citeANP{geb11b}
 \citeyear{geb11b}.)
 \begin{table}\label{Kappa}
 \begin{tabular}{l}
   \hline
   \\
-  {\tt \% place queens on the chess board}\\ 
+  {\tt \% place queens on the chess board}\\
   {\tt \{ q(1..n,1..n) \}.}\\
   \\
-  {\tt \% exactly 1 queen per row/column}\\ 
+  {\tt \% exactly 1 queen per row/column}\\
   {\tt :- X = 1..n, not \#count\{ Y : q(X,Y) \} = 1. }\\
   {\tt :- Y = 1..n, not \#count\{ X : q(X,Y) \} = 1. }\\
   \\
-  {\tt \% pre-calculate the diagonals}\\ 
+  {\tt \% pre-calculate the diagonals}\\
   {\tt d1(X,Y,X-Y+n) :- X = 1..n, Y = 1..n. }\\
   {\tt d2(X,Y,X+Y-1) :- X = 1..n, Y = 1..n. }\\
   \\
-  {\tt \% at most one queen per diagonal}\\ 
+  {\tt \% at most one queen per diagonal}\\
   {\tt :- D = 1..n*2-1, 2 \{ q(X,Y) : d1(X,Y,D) \}. }\\
   {\tt :- D = 1..n*2-1, 2 \{ q(X,Y) : d2(X,Y,D) \}. }\\
   \\
@@ -139,7 +139,7 @@ the solutions in the language of Version~3 presented by \citeANP{geb11b}
 \caption{An ASP solution to the $n$-queens problem.}
 \end{table}
 Intervals are used in each rule of this program.  To include intervals, we
-have to modify the semantics from \citeANP{har14a} \citeyear{har14a} in 
+have to modify the semantics from \citeANP{har14a} \citeyear{har14a} in
 two ways.  First,
 we have to say that an arithmetic term denotes, generally, a finite set
 of integers, not a single integer.   (And it is not necessarily a set
@@ -149,13 +149,13 @@ $\{2,4,6\}$.)  Second, in the presence of intervals we cannot treat a choice
 rule  {\tt \{A\}} as shorthand for the disjunctive rule
 {\tt A $\!;\!$ not$\!$ A}
 % $$\hbox{\tt A ; not A}$$
-as proposed by \citeANP{fer05b} \citeyear{fer05b}.  Indeed, the first rule of 
+as proposed by \citeANP{fer05b} \citeyear{fer05b}.  Indeed, the first rule of
 the program in
 Table~\ref{Kappa} has $2^{n^2}$ stable models; the rule
 $$\hbox{\tt q(1..n,1..n) ; not  q(1..n,1..n)}$$
 has only 2 stable models.
 
-Another feature of {\sc gringo} not covered by \citeANP{har14a} 
+Another feature of {\sc gringo} not covered by \citeANP{har14a}
 \citeyear{har14a}, which is somewhat
 similar to integer intervals, is pooling.  Pooling is used, for instance, in
 the head of the rule
@@ -201,7 +201,7 @@ as well.  Thus the atom in front of the colon in~(\ref{lparse}) plays two
 roles: it tells us what to count, and it gives a condition on the stable
 model that needs to be checked.
 
-The language studied by \citeANP{har14a} \citeyear{har14a} does not include 
+The language studied by \citeANP{har14a} \citeyear{har14a} does not include
 lparse-style
 aggregates.  The easiest way to add such aggregates is to treat them as
 abbreviations.  For instance,~(\ref{lparse}) can be viewed as shorthand for
@@ -212,22 +212,22 @@ accommodate negated atoms in front of the colon.)  In this expression, the
 first occurrence of {\tt q(X,Y)} is syntactically a term, and the second is
 an atom.  Thus treating~(\ref{lparse}) as an abbreviation depends on the
 possibility of using the same symbol as a function and as a predicate.  This is
-customary in Prolog, but not in first-order logic, and this was not allowed by 
+customary in Prolog, but not in first-order logic, and this was not allowed by
 \citeANP{har14a} \citeyear{har14a}.
 
 Our goal is to define the syntax and semantics of the language AG
 (short for {\sl Abstract Gringo\/})---a large subset of the input language
-of {\sc gringo} that includes the features mentioned previously 
+of {\sc gringo} that includes the features mentioned previously
 and a few other constructs not described by \citeANP{har14a} \citeyear{har14a}.
 This is
 similar to the work that has led to the definition of the ASP
 Core language \cite{aspcore2}.\footnote{Syntactically, AG is essentially
 an extension of ASP Core.  But it does not include extra-logical
 constructs, such as weak constraints and queries.  The semantics of
-aggregates in AG is based on the approach of \citeANP{fer05} \citeyear{fer05} 
+aggregates in AG is based on the approach of \citeANP{fer05} \citeyear{fer05}
 and thus is not
 equivalent to the semantics of aggregates in ASP Core when aggregates
-are used recursively in the presence of negation.  Among the language 
+are used recursively in the presence of negation.  Among the language
 constructs that are not in
 ASP Core, in AG we find pooling, intervals, and conditional literals.
 (These constructs originally appeared in the input language of {\sc lparse},
@@ -273,10 +273,10 @@ We assume that five sets of symbols are selected:
 {\sl numerals}, {\sl symbolic constants}, {\sl negated constants},
 {\sl variables}, and {\sl aggregate names}. We assume that a 1--1
 correspondence between the set of symbolic constants and the set of negated
-constants is chosen.  For every symbolic constant $p$, the corresponding 
+constants is chosen.  For every symbolic constant $p$, the corresponding
 negated constant will be called its {\sl strong negation} and denoted by
-$\tilde{p}$. 
-Further, we assume that these sets do not contain the 
+$\tilde{p}$.
+Further, we assume that these sets do not contain the
 symbols
 \beq
 +\qquad -\qquad \times\qquad /\qquad..
@@ -293,62 +293,62 @@ symbols
 \eeq{conns}
 \beq
 ,\qquad ;\qquad :\qquad (\qquad )\qquad \{\qquad \} \qquad \langle \qquad
-\rangle 
+\rangle
 \eeq{punct}
-and that they are pairwise disjoint. All these symbols together form the 
+and that they are pairwise disjoint. All these symbols together form the
 alphabet of AG, and AG rules will be defined as strings over this alphabet.
 
 When a symbol is represented in ASCII, its type is determined by its first
 two characters. For instance, a numeral starts with a digit or~{\tt -}
 followed by a digit. A symbolic constant starts with a lower-case letter.
-A negated constant starts with~{\tt -} followed by a lower-case letter. 
-A variable starts with an upper-case letter, and an aggregate name starts 
+A negated constant starts with~{\tt -} followed by a lower-case letter.
+A variable starts with an upper-case letter, and an aggregate name starts
 with~{\tt \#}. (The strings {\tt \#false}, {\tt \#inf}, and ~{\tt \#sup},
 which represent $\bot$, {\it inf}, and {\it sup}, also  start with~{\tt \#}.)
-The symbols $\langle$ and $\rangle$ (which are used to indicate the 
-boundaries of a tuple within a term) correspond to the ASCII characters 
+The symbols $\langle$ and $\rangle$ (which are used to indicate the
+boundaries of a tuple within a term) correspond to the ASCII characters
 {\tt (} and {\tt )}.\footnote{When an AG term representing a tuple of
 length~1, such as $\langle a \rangle$, is represented in ASCII, a comma
 is appended to the tuple: {\tt (a,)} .}
-Each of the symbols (\ref{ops})--(\ref{punct}) 
+Each of the symbols (\ref{ops})--(\ref{punct})
 except for $\land$ and~$\lor$ has a unique ASCII representation;
-the symbols $\land$ and $\lor$ 
+the symbols $\land$ and $\lor$
 can be represented by semicolons and in some cases also by commas.
 
 We assume that a 1--1 correspondence between the set of numerals and the
 set~${\bf Z}$ of integers is chosen.  For every integer~$n$, the corresponding
 numeral will be denoted by~$\overline n$.
- 
+
 {\sl Terms} are defined recursively, as follows:
 \begin{itemize}
-\item all numerals, symbolic constants, and variables are terms; 
+\item all numerals, symbolic constants, and variables are terms;
 \item if~$f$ is a symbolic constant and~${\bf t}$ is a tuple\footnote{
-In this paper, when we refer to a {\sl tuple} of syntactic objects, we mean 
-that the tuple may be empty and that its members are separated by commas.}  
+In this paper, when we refer to a {\sl tuple} of syntactic objects, we mean
+that the tuple may be empty and that its members are separated by commas.}
 of terms then $f({\bf t})$ is a term;
-\item if $t_1$ and $t_2$ are  terms and $\star$ is one of the 
+\item if $t_1$ and $t_2$ are  terms and $\star$ is one of the
 symbols~(\ref{ops}) then $(t_1\star t_2)$ is a  term;
-\item if ${\bf t}$ is a tuple of terms then 
+\item if ${\bf t}$ is a tuple of terms then
 $\langle{\bf t}\rangle$ is a term.
 \end{itemize}
 
 In a term of the form $f()$ the parentheses can be dropped, so that every
 symbolic constant can be viewed as a term.  In a term of the form
-$(t_1\star t_2)$ we will drop the parentheses when it should not lead to 
-confusion. A term of the form $(\overline 0 - t)$ can be abbreviated as $-t$. 
+$(t_1\star t_2)$ we will drop the parentheses when it should not lead to
+confusion. A term of the form $(\overline 0 - t)$ can be abbreviated as $-t$.
 
-A term, or a tuple of terms, is {\sl precomputed} if it contains neither 
-variables nor symbols~(\ref{ops}). 
+A term, or a tuple of terms, is {\sl precomputed} if it contains neither
+variables nor symbols~(\ref{ops}).
 We assume a total order on precomputed terms such that {\it inf} is its least
 element, {\it sup} is its greatest element, and,
-for any integers $m$ and $n$, $\overline m \leq \overline n$ iff $m \leq n$.  
+for any integers $m$ and $n$, $\overline m \leq \overline n$ iff $m \leq n$.
 
 We assume that for each aggregate name~$\alpha$ a function $\widehat \alpha$
-is chosen that maps every set of tuples of precomputed terms to a precomputed 
-term.\footnote{\label{ft3}This understanding of $\widehat \alpha$ is different from that 
+is chosen that maps every set of tuples of precomputed terms to a precomputed
+term.\footnote{\label{ft3}This understanding of $\widehat \alpha$ is different from that
 given by \citeANP{har14a} \citeyear[Section~3.3]{har14a}. There, $\widehat \alpha$ is understood as
 a function that maps tuples of precomputed terms to elements of $\bf Z \cup
-\{\infty, - \infty\}$. } 
+\{\infty, - \infty\}$. }
 The AG counterparts of the aggregates implemented in Version 4.5 of
 {\sc gringo} are defined below using the following terminology.
 If the first member of a tuple~$\bf t$
@@ -359,37 +359,37 @@ For any set~$T$ of tuples of precomputed terms,
 \begin{itemize}
 \item $\widehat{{\it count}}(T)$ is the numeral corresponding to the cardinality of~$T$ if~$T$ is finite, and
 ${\it sup}$ otherwise;
-\item $\widehat{{\it sum}}(T)$ is the numeral corresponding to the sum of the 
+\item $\widehat{{\it sum}}(T)$ is the numeral corresponding to the sum of the
 weights of all tuples in~$T$
 if~$T$ contains finitely many tuples with non-zero weights, and $0$ otherwise;
-\item $\widehat{{\it sum+}}(T)$ is the numeral corresponding to the sum of the 
+\item $\widehat{{\it sum+}}(T)$ is the numeral corresponding to the sum of the
 weights of all tuples in~$T$
 whose weights are positive if~$T$ contains finitely many such tuples,
 and {\it sup} otherwise;
-\item $\widehat{{\it min}}(T)$ is~${\it sup}$ if~$T$ is empty, the 
-least element of the set consisting of the first elements of the tuples in $T$ 
+\item $\widehat{{\it min}}(T)$ is~${\it sup}$ if~$T$ is empty, the
+least element of the set consisting of the first elements of the tuples in $T$
 if $T$ is a finite non-empty set, and {\it inf} if~$T$ is infinite;
 \item
-$\widehat{{\it max}}(T)$ is~{\it inf} if~$T$ is empty, the greatest element 
-of the set consisting of the first elements of the tuples in $T$ 
+$\widehat{{\it max}}(T)$ is~{\it inf} if~$T$ is empty, the greatest element
+of the set consisting of the first elements of the tuples in $T$
 if $T$ is a finite non-empty set, and {\it sup} if~$T$ is infinite.
 \end{itemize}
 
 \subsection{Atoms, Literals, and Choice Expressions}
 
 A {\sl pool} is an expression of the form
-${\bf t}_1 ; \dots ; {\bf t}_n$  where $n \geq 1$ and each ${\bf t}_i$  
+${\bf t}_1 ; \dots ; {\bf t}_n$  where $n \geq 1$ and each ${\bf t}_i$
 is a tuple of terms.\footnote{This form of pooling is less general than what
 is allowed in the input language of {\sc gringo}.  For instance, $f(a;b)$ is
 neither a term nor a pool.}
-In particular, every tuple of terms is a pool.   
+In particular, every tuple of terms is a pool.
 
 An {\sl atom} is a string of one of the forms
 $p(P),\ \tilde{p}(P)$
 where $p$ is a symbolic constant and $P$ is a pool.
-In an atom of the form $p()$ or $\tilde{p}()$ the parentheses can be 
-dropped, so that all symbolic constants and all negated constants can be viewed 
-as atoms. 
+In an atom of the form $p()$ or $\tilde{p}()$ the parentheses can be
+dropped, so that all symbolic constants and all negated constants can be viewed
+as atoms.
 
 For any atom~$A$, the strings
 \beq
@@ -403,17 +403,17 @@ Dropping a double negation may change the meaning of a rule.  For
 instance, the one-rule program $p\ar \no\ \no\ p$ has two stable models
 $\emptyset$, $\{p\}$ (see Section~\ref{sem:inf}); the latter will disappear
 if we drop $\no\ \no$.} An {\sl arithmetic literal} is
-a string of the form $t_1\prec t_2$ 
+a string of the form $t_1\prec t_2$
 where~$t_1$,~$t_2$ are terms and $\prec$ is one of the symbols (\ref{comps}).
 %A {\sl literal} is
-%a symbolic literal or a string of the form $t_1\prec t_2$ 
+%a symbolic literal or a string of the form $t_1\prec t_2$
 %where~$t_1$,~$t_2$ are terms and $\prec$ is one of the symbols (\ref{comps}).
 
 A {\sl conditional literal} is a string of the form
 $H : {\bf L}$
 where $H$ is a symbolic or arithmetic literal or the symbol $\bot$ and
 ${\bf L}$ is a tuple of symbolic or arithmetic literals.
-If ${\bf L}$ is empty then we will drop the colon, so that every symbolic or 
+If ${\bf L}$ is empty then we will drop the colon, so that every symbolic or
 arithmetic literal
 can be viewed as a conditional literal.\footnote{In the input language of
 {\sc gringo}, dropping the colon when ${\bf L}$ is empty is required.}
@@ -421,7 +421,7 @@ can be viewed as a conditional literal.\footnote{In the input language of
 An {\sl aggregate atom} is a string of one of the forms
 \begin{align}
        \alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}&\prec s
-\label{ag1}\\ 
+\label{ag1}\\
 s\prec\;\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}&
 \label{ag2}\\
 s_1\prec_1\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}&
@@ -436,12 +436,12 @@ $\alpha$ is an aggregate name,
 \item
 each ${\bf t}_i$ is a tuple of terms,
 \item
-each ${\bf L}_i$ is a tuple of symbolic or arithmetic literals (if 
-${\bf L}_i$ is empty and ${\bf t}_i$ is nonempty then the preceding colon may 
+each ${\bf L}_i$ is a tuple of symbolic or arithmetic literals (if
+${\bf L}_i$ is empty and ${\bf t}_i$ is nonempty then the preceding colon may
 be dropped),
 \item
 each of $\prec$, $\prec_1$, $\prec_2$ is one of the
-symbols~(\ref{comps}), 
+symbols~(\ref{comps}),
 %other than $\neq$,\footnote{In the input language of
 %{\sc gringo}, $\neq$ in an aggregate atom is allowed.  But that use of~$\neq$
 %is not compatible with the semantics of
@@ -455,8 +455,8 @@ are {\sl aggregate literals}.
 
 A {\sl literal} is a conditional literal or an aggregate literal.
 
-A {\sl choice expression} is a string of the form $\{A\}$ where 
-$A$ is an atom. 
+A {\sl choice expression} is a string of the form $\{A\}$ where
+$A$ is an atom.
 
 
 \subsection{Rules and Programs} \label{rp}
@@ -470,14 +470,14 @@ or of the form
 C \ar B_1\,\land\,\cdots\,\land\,B_m
 \eeq{rule4}
 ($k,m\geq 0$), where each~$H_i$ is a symbolic or arithmetic
-literal,\footnote{In the input language of {\sc gringo}, $H_i$ may be any 
-conditional literal.}~$C$ is a choice 
-expression, and each~$B_j$ is a literal. 
-The expression $B_1 \land \dots \land B_m$ is the 
-{\sl body} of the rule; $H_1 \lor \dots \lor H_k$ is the {\sl head}  
-of (\ref{rule3}); $C$ is the {\sl head} of (\ref{rule4}). 
-If the body of a rule is empty and the head is not then the arrow can be 
-dropped. %A rule with an empty head is called a {\sl constraint}. 
+literal,\footnote{In the input language of {\sc gringo}, $H_i$ may be any
+conditional literal.}~$C$ is a choice
+expression, and each~$B_j$ is a literal.
+The expression $B_1 \land \dots \land B_m$ is the
+{\sl body} of the rule; $H_1 \lor \dots \lor H_k$ is the {\sl head}
+of (\ref{rule3}); $C$ is the {\sl head} of (\ref{rule4}).
+If the body of a rule is empty and the head is not then the arrow can be
+dropped. %A rule with an empty head is called a {\sl constraint}.
 
 For instance, here are the first five rules of the program from
 Table~\ref{Kappa} written in the syntax of~AG:
@@ -488,9 +488,9 @@ $$
 = \; \overline 1,\\
   R_3: \qquad  & \ar \; Y = \overline 1\;..\;\overline n \; \land \; \no \; {\it count}\{ X : q(X,Y) \}\;
 = \; \overline 1,\\
-  R_4: \qquad  & {\it d1}(X,Y,X-Y+\overline n) \; \ar \; X = \overline 1\;..\;\overline n \; \land \; 
+  R_4: \qquad  & {\it d1}(X,Y,X-Y+\overline n) \; \ar \; X = \overline 1\;..\;\overline n \; \land \;
 Y = \overline 1\;..\;\overline n,\\
-  R_5: \qquad  & {\it d2}(X,Y,X+Y-\overline 1) \; \ar \; X = \overline 1\;..\;\overline n \; \land \; 
+  R_5: \qquad  & {\it d2}(X,Y,X+Y-\overline 1) \; \ar \; X = \overline 1\;..\;\overline n \; \land \;
 Y = \overline 1\;..\;\overline n.
 \ea
 $$
@@ -508,19 +508,19 @@ s_1\prec_1
 \eeq{chexp}
 ($n \geq 0$),
 where
-each $L_i$ is a symbolic literal of one of the forms 
+each $L_i$ is a symbolic literal of one of the forms
 \beq
 p({\bf t})\qquad  \no \; p({\bf t})\qquad   \no \; \no \; p({\bf t})
 \eeq{forms}
 ($p$ is a symbolic or negated constant and ${\bf t}$ is a tuple of terms)
-and $\alpha$, ${\bf t}_i$, ${\bf L}_i$, $\prec_1$, $\prec_2$, $s_1$, and $s_2$  
+and $\alpha$, ${\bf t}_i$, ${\bf L}_i$, $\prec_1$, $\prec_2$, $s_1$, and $s_2$
 are as in the definition of an aggregate atom.
 Then a string of the form
 \beq
 C \ar B_1\,\land\,\cdots\,\land\,B_m
 \eeq{choice}
 ($m\geq 0$), where each~$B_j$ is a literal,
- is shorthand for the set of rules consisting of the rule 
+ is shorthand for the set of rules consisting of the rule
 \beq
 \ar B_1\,\land\,\cdots\,\land\,B_m\,\land\;
   \no\ s_1\prec_1
@@ -531,34 +531,34 @@ and, for each $L_i$ in (\ref{chexp}) such that $L_i$ is an atom, the rule
 \beq
 \{L_i\} \ar B_1\,\land\,\cdots\,\land\,B_m\,\land\,C_i
 \eeq{choice1}
-where~$C_i$ is the conjunction of the members 
-of~${\bf L}_i$. 
+where~$C_i$ is the conjunction of the members
+of~${\bf L}_i$.
 
-In both (\ref{choice2}) and (\ref{choice1}), the conjunction sign shown 
-after~$B_m$ should be dropped if $m=0$; in (\ref{choice1}) it should also 
-be dropped if $C_i$ is empty.  The parts $s_1\prec_1$ and $\prec_2s_2$ in 
+In both (\ref{choice2}) and (\ref{choice1}), the conjunction sign shown
+after~$B_m$ should be dropped if $m=0$; in (\ref{choice1}) it should also
+be dropped if $C_i$ is empty.  The parts $s_1\prec_1$ and $\prec_2s_2$ in
 (\ref{chexp}) are optional; if one of them is
 missing then it is dropped from~(\ref{choice2}) as well; if both are missing
-then rule~(\ref{choice2}) is dropped from the set altogether.  If $m=0$ in 
+then rule~(\ref{choice2}) is dropped from the set altogether.  If $m=0$ in
 (\ref{choice}) then the arrow can be dropped.
 
 The {\sl term representations} of literals (\ref{forms}) are the tuples
 $$
 \overline 0, p({\bf t})\qquad \overline 1,p({\bf t}) \qquad \overline 2, p({\bf t})
 $$
-of terms. (Each of them is indeed a tuple of terms, because 
+of terms. (Each of them is indeed a tuple of terms, because
 $p({\bf t})$ can be viewed as a term.)
- 
+
 Also viewed as an abbreviation is any expression of the form
 \beq
 s_1\,\{L_1:{\bf L}_1\,;\ldots;\,L_n:{\bf L}_n\}\,s_2
 \eeq{cardc}
 ($n>0$), where $s_1$, $s_2$ are terms,
-each~$L_i$ is a symbolic literal  of one of the forms  
+each~$L_i$ is a symbolic literal  of one of the forms
 (\ref{forms}) that does not contain $..\;$, and each~${\bf L}_i$ is a tuple
-of symbolic or arithmetic literals.\footnote{To be precise, if~${\bf L}_i$ 
-is empty then the colon after~$L_i$ is dropped.} 
-Such an expression is understood differently 
+of symbolic or arithmetic literals.\footnote{To be precise, if~${\bf L}_i$
+is empty then the colon after~$L_i$ is dropped.}
+Such an expression is understood differently
 depending on whether it occurs in the head or the body of a rule.
 In the head of a rule,~(\ref{cardc}) is understood as shorthand for
 an expression of the form (\ref{chexp}):
@@ -567,19 +567,19 @@ s_1\leq
 {\it count}\{{\bf t}_1: L_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n: L_n : {\bf L}_n\}
 \leq s_2
 \eeq{choicehead}
-where ${\bf t}_i$ is the term representation of $L_i$.  If either or 
-both of the terms~$s_1$,~$s_2$ are missing, the abbreviation is 
-understood in a similar way. (Note that choice expressions that do not 
-contain~$..$ are 
-expressions of the form (\ref{cardc}) where both $s_1$ and $s_2$ are missing, 
-$n =1$, $L_1$ is of the form $p({\bf t})$, and ${\bf L}_1$ is empty. In this 
+where ${\bf t}_i$ is the term representation of $L_i$.  If either or
+both of the terms~$s_1$,~$s_2$ are missing, the abbreviation is
+understood in a similar way. (Note that choice expressions that do not
+contain~$..$ are
+expressions of the form (\ref{cardc}) where both $s_1$ and $s_2$ are missing,
+$n =1$, $L_1$ is of the form $p({\bf t})$, and ${\bf L}_1$ is empty. In this
 case, we do not view (\ref{cardc}) as an abbreviation.)
- 
-In the body of a rule (\ref{cardc}) is understood as shorthand for the 
+
+In the body of a rule (\ref{cardc}) is understood as shorthand for the
 aggregate atom $$s_1\leq{\it count}\{{\bf t}_1:L_1,{\bf L}_1;\ldots;\,
 {\bf t}_n :L_n, {\bf L}_n\}\leq s_2$$
-where ${\bf t}_i$ is the term representation of $L_i$.\footnote{If~${\bf L}_i$ 
-is empty then the comma after~$L_i$ in this expression should be dropped.} If 
+where ${\bf t}_i$ is the term representation of $L_i$.\footnote{If~${\bf L}_i$
+is empty then the comma after~$L_i$ in this expression should be dropped.} If
 either of the terms~$s_1$,~$s_2$ in (\ref{cardc}) is missing, the
 abbreviation is understood in a similar way.
 
@@ -595,10 +595,10 @@ $$
 Written out in full, these expressions become
 $$
 \ba{ll}
-R_6: \qquad  & \ar \; D = \overline 1\;..\;\overline n*\overline 2-\overline 1 
+R_6: \qquad  & \ar \; D = \overline 1\;..\;\overline n*\overline 2-\overline 1
 \;\; \land \;\; \overline 2 \leq {\it count}\{ \overline 0, q(X,Y)
 :q(X,Y), d1(X,Y,D) \},\\
-R_7: \qquad  & \ar \; D = \overline 1\;..\;\overline n*\overline 2-\overline 1 
+R_7: \qquad  & \ar \; D = \overline 1\;..\;\overline n*\overline 2-\overline 1
 \;\; \land \;\; \overline 2 \leq {\it count}\{ \overline 0,q(X,Y)
 :q(X,Y), d2(X,Y,D) \}.
 \ea
@@ -606,13 +606,13 @@ $$
 
 \section{Semantics of AG} \label{sec:semantics}
 
-We will define the semantics of AG using a syntactic 
-transformation~$\tau$.  The function~$\tau$ converts rules 
-into infinitary formulas formed from atoms 
-of the form $p({\bf t})$ or $\tilde{p}({\bf t})$, where~$p$ is a symbolic 
-constant, and~${\bf t}$ is a tuple 
-of precomputed terms.  Then the stable models of a program 
-will be defined in terms of stable model semantics of infinitary formulas 
+We will define the semantics of AG using a syntactic
+transformation~$\tau$.  The function~$\tau$ converts rules
+into infinitary formulas formed from atoms
+of the form $p({\bf t})$ or $\tilde{p}({\bf t})$, where~$p$ is a symbolic
+constant, and~${\bf t}$ is a tuple
+of precomputed terms.  Then the stable models of a program
+will be defined in terms of stable model semantics of infinitary formulas
 in the sense of \citeANP{tru12} \citeyear{tru12}, which is reviewed below.
 
 \subsection{Review: Infinitary Propositional Formulas}\label{sem:inf}
@@ -628,12 +628,12 @@ $\mathcal{H}$ of $\mathcal{F}_i$, and expressions \hbox{$F\rar G$}
 for all $F,G\in\mathcal{F}_i$.
 \end{itemize}
 The elements of $\bigcup^{\infty}_{i=0}\mathcal{F}_i$ are called {\sl
-(infinitary) formulas} over $\sigma$.  
+(infinitary) formulas} over $\sigma$.
 
-In an infinitary formula, the symbols $\top$ and $\bot$ 
-are understood as abbreviations 
-for~$\emptyset^{\land}$ and $\emptyset^{\lor}$ respectively; 
-$\neg F$ stands for $F\rar\bot$, and $F\lrar G$ 
+In an infinitary formula, the symbols $\top$ and $\bot$
+are understood as abbreviations
+for~$\emptyset^{\land}$ and $\emptyset^{\lor}$ respectively;
+$\neg F$ stands for $F\rar\bot$, and $F\lrar G$
 stands for \hbox{$(F\rar G)\land(G\rar F)$}.
 % We can write $\{F,G\}^\land$ as $F\land G$, and
 % $\{F,G\}^\lor$ as $F\lor G$.  This convention allows us to view
@@ -652,9 +652,9 @@ such that $I\models F$.
 \item $I\models F\rar G$ if $I\not\models F$ or $I\models G$.
 \end{itemize}
 We say that an interpretation satisfies a set $\mathcal{H}$ of formulas,
-or is a {\sl model} of $\mathcal{H}$, if it satisfies every formula in 
+or is a {\sl model} of $\mathcal{H}$, if it satisfies every formula in
 $\mathcal{H}$.  Two sets of formulas are {\sl equivalent} if
-they have the same models.  
+they have the same models.
 
 The {\sl reduct} $F^I$ of a formula~$F$ w.r.t. an
 interpretation~$I$ is defined as follows:
@@ -682,69 +682,69 @@ both~$\emptyset$ and $\{p\}$ are stable models of $\{\neg\neg p\rar p\}$.
 
 A term is {\sl ground} if it does not contain variables. The definition of
 ``ground'' for pools, symbolic literals, and arithmetic literals is the same.
-Semantically, every ground term~$t$  represents a finite 
-set of precomputed terms~$[t]$, which is defined recursively:  
+Semantically, every ground term~$t$  represents a finite
+set of precomputed terms~$[t]$, which is defined recursively:
 \begin{itemize}
-\item if $t$ is a numeral or a symbolic constant then $[t]$ is 
+\item if $t$ is a numeral or a symbolic constant then $[t]$ is
 $\{t\}$;
-\item if $t$ is $f(t_1, \dots, t_n)$  then $[t]$ is the set of 
-terms $f(r_1, \dots, r_n)$ for all 
-$r_1 \in [t_1], \dots,$ $r_n \in [t_n]$; 
-\item if $t$ is $(t_1 + t_2)$ then $[t]$ is the set  
-of numerals $\overline {n_1 + n_2}$ for all integers $n_1, n_2$ such that 
-$\overline {n_1} \in [t_1]$ and $\overline {n_2} \in [t_2]$; similarly when $t$ is 
+\item if $t$ is $f(t_1, \dots, t_n)$  then $[t]$ is the set of
+terms $f(r_1, \dots, r_n)$ for all
+$r_1 \in [t_1], \dots,$ $r_n \in [t_n]$;
+\item if $t$ is $(t_1 + t_2)$ then $[t]$ is the set
+of numerals $\overline {n_1 + n_2}$ for all integers $n_1, n_2$ such that
+$\overline {n_1} \in [t_1]$ and $\overline {n_2} \in [t_2]$; similarly when $t$ is
 $(t_1 - t_2)$ or $(t_1 \times t_2)$;
-\item if $t$ is $(t_1 / t_2)$ then $[t]$ is the set  
+\item if $t$ is $(t_1 / t_2)$ then $[t]$ is the set
 of numerals $\overline{\lfloor n_1/n_2 \rfloor}$ for all
-integers $n_1, n_2$ such that 
+integers $n_1, n_2$ such that
 $\overline {n_1} \in [t_1]$, $\overline {n_2} \in [t_2]$, and $n_2\neq 0$;
-\item if $t$ is $(t_1\, ..\, t_2)$ then $[t]$ is the set of 
+\item if $t$ is $(t_1\, ..\, t_2)$ then $[t]$ is the set of
 numerals~$\overline m$ for all integers $m$ such that,
-for some integers $n_1, n_2,$  
-$$ \overline{n_1} \in [t_1], \qquad \overline{n_2} \in [t_2], \qquad 
+for some integers $n_1, n_2,$
+$$ \overline{n_1} \in [t_1], \qquad \overline{n_2} \in [t_2], \qquad
 n_1 \leq m \leq n_2;$$
-\item if $t$ is $\langle t_1, \dots, t_n\rangle$ 
+\item if $t$ is $\langle t_1, \dots, t_n\rangle$
 then $[t]$ is the set of terms
 $\langle r_1, \dots, r_n \rangle$ for all $r_1 \in [t_1],\dots,$ $r_n \in [t_n]$.
 \end{itemize}
-This definition is extended to an arbitrary ground pool~$P$; $[P]$ 
+This definition is extended to an arbitrary ground pool~$P$; $[P]$
 is a finite set of precomputed tuples:
 \begin{itemize}
 \item if $P$ is a tuple $t_1, \dots, t_n$ of terms $(n \not = 1)$
-then $[P]$ is the set of tuples $r_1, \dots, r_n$ for all 
-\hbox{$r_1 \in [t_1], \dots, r_n \in [t_n]$}; 
-\item if $P$ is a pool ${\bf t}_1; \dots; {\bf t}_n$ $(n > 1)$ then 
+then $[P]$ is the set of tuples $r_1, \dots, r_n$ for all
+\hbox{$r_1 \in [t_1], \dots, r_n \in [t_n]$};
+\item if $P$ is a pool ${\bf t}_1; \dots; {\bf t}_n$ $(n > 1)$ then
 $[P]$ is $[{\bf t}_1] \cup \dots \cup [{\bf t}_n]$.
 \end{itemize}
 
 %%%%%
 For instance, $[\overline 1..\overline n,\overline 1..\overline n]$ is the set
-$\{\overline i , \overline j : 1 \leq i,j \leq n \}$. 
+$\{\overline i , \overline j : 1 \leq i,j \leq n \}$.
 
-It is clear that if a ground term $t$ contains neither symbolic 
-constants nor the symbols~$\langle$ and~$\rangle$ then every element of $[t]$ 
-is a numeral. 
-If a tuple~${\bf t}$ of ground terms is  
-precomputed then $[{\bf t}]$ is~$\{{\bf t}\}$. 
+It is clear that if a ground term $t$ contains neither symbolic
+constants nor the symbols~$\langle$ and~$\rangle$ then every element of $[t]$
+is a numeral.
+If a tuple~${\bf t}$ of ground terms is
+precomputed then $[{\bf t}]$ is~$\{{\bf t}\}$.
 The set~$[t]$ can be empty. For example,
 $[1..0] = [1/0] = [1+a] = \emptyset$.
 
-About a tuple of terms that does not contain .. we say that it is 
+About a tuple of terms that does not contain .. we say that it is
 {\sl interval-free}.
-It is clear that if a tuple~${\bf t}$ of 
-ground terms is interval-free then the cardinality of the set 
-$[{\bf t}]$ is at most~$1$. 
+It is clear that if a tuple~${\bf t}$ of
+ground terms is interval-free then the cardinality of the set
+$[{\bf t}]$ is at most~$1$.
 
 \subsection{Semantics of Arithmetic and Symbolic Literals}
 
-For any ground (symbolic or arithmetic) literal $L$ we will define 
-two translations, 
-$\tau_{\land}L$ and $\tau_{\lor}L$. The 
-specific translation function applied to an occurrence of a symbolic or 
+For any ground (symbolic or arithmetic) literal $L$ we will define
+two translations,
+$\tau_{\land}L$ and $\tau_{\lor}L$. The
+specific translation function applied to an occurrence of a symbolic or
 arithmetic literal in a rule
-depends on the context, as we will see in the following sections. 
+depends on the context, as we will see in the following sections.
 
-We will first consider symbolic literals. 
+We will first consider symbolic literals.
 For any ground atom $A$,
 \begin{itemize}
 \item
@@ -756,52 +756,52 @@ if $A$ is $\tilde{p}(P)$ then $\tau_{\land}A$ is the conjunction of
 atoms $\tilde{p}({\bf t})$ over all tuples $\bf t$ in~$[P]$,
 and $\tau_{\lor}A$ is the disjunction of these atoms;
 \item $\tau_{\land} (\no \; A)$ is $\neg \tau_{\lor} A$, and
- $\tau_{\lor} (\no \; A)$ is $\neg \tau_{\land} A$; 
-\item $\tau_{\land} (\no \; \no \; A)$ is 
-$\neg\neg \tau_{\land} A$, and  
-$\tau_{\lor} (\no \; \no \; A)$ is 
-$\neg\neg \tau_{\lor} A$. 
+ $\tau_{\lor} (\no \; A)$ is $\neg \tau_{\land} A$;
+\item $\tau_{\land} (\no \; \no \; A)$ is
+$\neg\neg \tau_{\land} A$, and
+$\tau_{\lor} (\no \; \no \; A)$ is
+$\neg\neg \tau_{\lor} A$.
 \end{itemize}
 The definitions of  $\tau_{\land}$ and $\tau_{\lor}$ for arithmetic literals
- are as follows: 
+ are as follows:
 \begin{itemize}
-\item $\tau_{\land} (t_1 \prec t_2)$ is 
-$\top$ if the relation $\prec$ holds between 
-the terms $r_1$ and $r_2$ for all $r_1 \in 
-[t_1]$ and $r_2 \in [t_2]$, and $\bot$  
-otherwise; 
+\item $\tau_{\land} (t_1 \prec t_2)$ is
+$\top$ if the relation $\prec$ holds between
+the terms $r_1$ and $r_2$ for all $r_1 \in
+[t_1]$ and $r_2 \in [t_2]$, and $\bot$
+otherwise;
 \item $\tau_{\lor} (t_1 \prec t_2)$ is
-$\top$ if the relation $\prec$ holds between the terms 
+$\top$ if the relation $\prec$ holds between the terms
 $r_1$ and $r_2$ for some $r_1, r_2$
-such that $r_1 \in [t_1]$ and $r_2 \in [t_2]$, and $\bot$ otherwise. 
+such that $r_1 \in [t_1]$ and $r_2 \in [t_2]$, and $\bot$ otherwise.
 \end{itemize}
 For instance, $\tau_{\lor}p(\overline 2..\overline 4)$ is
 $p(\overline 2) \lor p(\overline 3) \lor p(\overline 4)$,
 and $\tau_{\lor}(\overline 2=\overline 2..\overline 4)$ is $\top$.
- 
-For any tuple ${\bf L}$ of ground literals, 
+
+For any tuple ${\bf L}$ of ground literals,
 $\tau_{\lor}{\bf L}$ stands for the conjunction of the formulas
-$\tau_{\lor}L$ for all 
-members $L$ of ${\bf L}$. The expressions $\tau_{\land}\bot$ and 
-$\tau_{\lor}\bot$ both stand for $\bot$. 
+$\tau_{\lor}L$ for all
+members $L$ of ${\bf L}$. The expressions $\tau_{\land}\bot$ and
+$\tau_{\lor}\bot$ both stand for $\bot$.
 
 It is clear that if $A$ has the form $p({\bf t})$ or $\tilde{p}({\bf t})$,
-where ${\bf t}$ is a tuple of precomputed terms, then each of the 
-formulas $\tau_{\land} A$ and $\tau_{\lor} A$ is $A$. 
- 
+where ${\bf t}$ is a tuple of precomputed terms, then each of the
+formulas $\tau_{\land} A$ and $\tau_{\lor} A$ is $A$.
+
 \subsection{Semantics of Choice Expressions}
 
-The result of applying $\tau$ to a choice expression $\{p(P)\}$ is the 
+The result of applying $\tau$ to a choice expression $\{p(P)\}$ is the
 conjunction of the formulas
-$p({\bf t}) \lor \neg p({\bf t})$ over all tuples ${\bf t}$ in $[P]$. 
-Similarly, the result of applying $\tau$ to a choice expression $\{\tilde{p}(P)\}$ 
+$p({\bf t}) \lor \neg p({\bf t})$ over all tuples ${\bf t}$ in $[P]$.
+Similarly, the result of applying $\tau$ to a choice expression $\{\tilde{p}(P)\}$
 is the conjunction of the formulas $\tilde{p}({\bf t}) \lor \neg \tilde{p}({\bf t})$
 over all tuples ${\bf t}$ in $[P]$.
 
 For instance, the result of applying $\tau$ to rule $R_1$ (see
 Section~\ref{rp}) is
 \beq
-\bigwedge_{1 \leq i,j \leq n} \left ( q(\overline i, \overline j) \lor \neg q(\overline i, \overline j) 
+\bigwedge_{1 \leq i,j \leq n} \left ( q(\overline i, \overline j) \lor \neg q(\overline i, \overline j)
 \right ).
 \eeq{tauR_1}
 
@@ -813,16 +813,16 @@ About a variable we say that it is {\sl global}
 in a conditional literal $H : {\bf L}$, if it occurs in~$H$ but does not
 occur in~${\bf L}$;
 \item
-in an aggregate literal $A$, $\no \; A$, or $\no \; \no A$, where $A$ is of one of 
+in an aggregate literal $A$, $\no \; A$, or $\no \; \no A$, where $A$ is of one of
 the forms~(\ref{ag1})--(\ref{ag3}), if it occurs in~$s, s_1,$ or $s_2$;
 \item
 in a rule~(\ref{rule3}), if it is global in at least one of the
 expressions~$H_i$,~$B_j$;
 \item
-in a rule~(\ref{rule4}), if it occurs in $C$ or is global in at least one of 
+in a rule~(\ref{rule4}), if it occurs in $C$ or is global in at least one of
 the expressions~~$B_j$.
 \end{itemize}
-%For instance, the head of the rule 
+%For instance, the head of the rule
 %\beq
 %\i{total\_hours}(N) \ar \i{sum}\{H,C:\i{enroll}(C),hours(H,C)\}=N
 %\eeq{ag-rule}
@@ -830,19 +830,19 @@ the expressions~~$B_j$.
 %atom with the global variable~$N$.  Consequently~$N$ is global in the
 %rule as well.
 
-An {\sl instance} of a rule~$R$ is any 
-rule that can be obtained from~$R$ by substituting 
+An {\sl instance} of a rule~$R$ is any
+rule that can be obtained from~$R$ by substituting
 precomputed terms for all global variables.\footnote{\label{ft2} This
 definition
-differs slightly from that given by \citeANP{har14a} 
-\citeyear[Section~3.3]{har14a}. There, 
-substitutions that yield symbolic constants in the scope of arithmetical 
+differs slightly from that given by \citeANP{har14a}
+\citeyear[Section~3.3]{har14a}. There,
+substitutions that yield symbolic constants in the scope of arithmetical
 operators do not form instances.
-% For example, under the definition of an 
-% instance given here, substituting any precomputed term for $X$ 
+% For example, under the definition of an
+% instance given here, substituting any precomputed term for $X$
 % in the rule $p(X+1) \ar q(X)$
-% yields an instance; on the other hand, under the definition of an instance 
-% from \cite{har14a}, only subtituting a numeral for $X$ yields an instance. 
+% yields an instance; on the other hand, under the definition of an instance
+% from \cite{har14a}, only subtituting a numeral for $X$ yields an instance.
 In a similar way, we treat variables in conditional literals
 and aggregate literals (Sections~\ref{sem:cond} and~\ref{sem:ag}) differently
 than how they are treated by \citeANP{har14a} \citeyear{har14a}.}
@@ -854,14 +854,14 @@ so that the instances of $R_2$ are rules of the form
 $$
 \ar \; r = \overline 1\;..\;\overline n \; \land \; \no \; {\it count}\{ Y : q(r,Y) \} = \overline 1
 $$
-for all precomputed terms $r$. 
+for all precomputed terms $r$.
 The variables $X$ and $Y$ are global in $R_4$; instances of $R_4$ are
-% rules of the form 
+% rules of the form
 $$
-{\it d1}(r, s, r- s+\overline n) \; \ar \;  r = \overline 1\;..\;\overline n \; \land \; 
+{\it d1}(r, s, r- s+\overline n) \; \ar \;  r = \overline 1\;..\;\overline n \; \land \;
  s = \overline 1\;..\;\overline n
 $$
-for all precomputed terms $r$ and $s$. 
+for all precomputed terms $r$ and $s$.
 \subsection{Semantics of Conditional Literals}\label{sem:cond}
 
 If~$t$ is a term,~${\bf x}$ is a tuple of distinct variables, and~${\bf r}$ is
@@ -871,86 +871,117 @@ for~${\bf x}$ will be denoted by $t^{\bf x}_{\bf r}$.  Similar notation will be
 used for the result of substituting~${\bf r}$ for~${\bf x}$ in expressions of
 other kinds, such as literals and tuples of literals.
 
-The result of applying $\tau$ to a closed conditional literal $H : {\bf L}$  
+The result of applying $\tau$ to a closed conditional literal $H : {\bf L}$
 is the conjunction of the formulas
 $$\tau_{\lor} ({\bf L}^{\bf x}_{\bf r})\rar \tau_{\lor}(H^{\bf x}_{\bf r})$$
 where ${\bf x}$ is the list of variables occurring in~$H : {\bf L}$,
 over all tuples ${\bf r}$ of precomputed terms of the same length as~${\bf
-x}$. 
+x}$.
 
-For instance, the result of applying $\tau$ to the arithmetic literal 
-$r = \overline 1 .. \overline n$, where~$r$ is a precomputed term, is 
+For instance, the result of applying $\tau$ to the arithmetic literal
+$r = \overline 1 .. \overline n$, where~$r$ is a precomputed term, is
 $\tau_{\lor}(\epsilon) \rar \tau_{\lor}(r = \overline 1 .. \overline n)$, where
-$\epsilon$ is the tuple of length $0$.  
-The antecedent of this implication is $\top$. The consequent is~$\top$ if 
-$r$ is one of the numerals $\overline 1, \dots, \overline n$ and $\bot$ otherwise. 
+$\epsilon$ is the tuple of length $0$.
+The antecedent of this implication is $\top$. The consequent is~$\top$ if
+$r$ is one of the numerals $\overline 1, \dots, \overline n$ and $\bot$ otherwise.
 
 \subsection{Semantics of Aggregate Literals}\label{sem:ag}
 
-In this section, the semantics of ground aggregates proposed by 
-\citeANP{fer05} \citeyear[Section~4.1]{fer05} is adapted to closed aggregate 
+In this section, the semantics of ground aggregates proposed by
+\citeANP{fer05} \citeyear[Section~4.1]{fer05} is adapted to closed aggregate
 literals.  Let~$E$
 be a closed aggregate atom of one of the forms (\ref{ag1})--(\ref{ag3}), and
 let~${\bf x}_i$ be the list of variables occurring in~${\bf t}_i:{\bf L}_i$
 \hbox{($1\le i\le n$)}.  By~$A_i$ we denote the set of tuples~${\bf r}$ of
-precomputed terms of the same length as~${\bf x}_i$.  
-%such that all terms in
-%$({\bf t}_i)^{{\bf x}_i}_{\bf r}$ and all literals in
-%$({\bf L}_i)^{{\bf x}_i}_{\bf r}$ are well-formed. 
+precomputed terms of the same length as~${\bf x}_i$.
 By $A$ we denote the
-set $\{(i, {\bf r}) : i \in \{1, \dots, n\}, {\bf r} \in A_i\}$. 
+set $\{(i, {\bf r}) : i \in \{1, \dots, n\}, {\bf r} \in A_i\}$.
 
-Let $\Delta$ be a subset of $A$. Then by $[\Delta]$ we denote 
+Let $\Delta$ be a subset of $A$. Then by $[\Delta]$ we denote
 the union of the sets $[({\bf t}_i)^{{\bf x}_i}_{\bf r}]$ for all pairs
 $(i, {\bf r})\in\Delta$.
-We say that $\Delta$ {\sl justifies} $E$ if
+We say that $\Delta$ {\sl justifies}~$E$ with respect to a precomputed
+term\footnote{This definition of the semantics of aggregates is
+more complicated than that published in the original version of this document.
+There, a set $\Delta$
+either justifies an aggregate atom or not, without reference to a particular
+precomputed term
+$t$. The version here corrects a discrepancy between the semantics and the
+behavior of {\sc gringo} in the case when $s$
+represents a non-singleton set.\label{ft3a}
+} $t$ if
 \begin{itemize}
-\item  $E$ is of the form (\ref{ag1}) and the relation $\prec$ holds 
+\item  $E$ is of the form (\ref{ag1}) and the relation $\prec$ holds
 between $\widehat \alpha
-[{\Delta}]$ and $t$ for at least one precomputed term $t \in [s]$,  or
-\item $E$ is of the form (\ref{ag2}) and the relation $\prec$ holds between $t$ and 
-$\widehat \alpha [{\Delta}]$ for at least one precomputed term $t \in [s]$, or
-\item $E$ is of the 
-form (\ref{ag3}), the relation 
-$\prec_1$ holds between $t_1$ and $\widehat \alpha [\Delta]$ for at least one 
-precomputed term $t_1 \in [s_1]$, and the relation $\prec_2$ holds between $\widehat
-\alpha [\Delta]$ and $t_2$ for at least one precomputed term $t_2 \in [s_2]$. 
+[{\Delta}]$ and $t$,  or
+\item $E$ is of the form (\ref{ag2}) and the relation $\prec$ holds between $t$ and
+$\widehat \alpha [{\Delta}]$.
 \end{itemize}
+We say that $\Delta$ {\sl justifies}~$E$ with respect to a pair $t_1,t_2$ of precomputed
+terms if
+$E$ is of the
+form (\ref{ag3}), the relation
+$\prec_1$ holds between $t_1$ and $\widehat \alpha [\Delta]$, and the relation $\prec_2$ holds between $\widehat
+\alpha [\Delta]$ and $t_2$.
 
-We define $\tau E$ as the conjunction of the implications
+If $t$ is a precomputed term, and $E$ is of form (\ref{ag1}) or (\ref{ag2}),
+we define $\tau_t E$ as the conjunction of the implications
 \beq
   \bigwedge_{(i, {\bf r})\in\Delta}\tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r})
   \,\rar\,
   \bigvee_{(i,{\bf r})\in A\setminus\Delta}\tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_
   {\bf r})
 \eeq{agdef}
-over all sets $\Delta$ that do not justify~$E$.
+over all sets $\Delta$ that do not justify~$E$ with respect to $t$.
+If $t_1,t_2$ is a pair of precomputed terms, and $E$ is of form (\ref{ag3}),
+we define $\tau_{t_1,t_2} E$ as the conjunction \eqref{agdef}
+over all sets $\Delta$ that do not justify~$E$ with respect to $t_1,t_2$.
 
 %%%%%
-For instance, if $E$ is ${\it count}\{p(X):p(X)\} > 0$ then $\tau E$ is the 
-implication expressing that $p(r)$ holds for at least one precomputed term $r$:
+For instance, if $E$ is
+${\it count}\{p(X):p(X)\} > 0$
+then $\tau_{\o 0} E$ is the
+(conjunction containing the single) implication expressing that $p(r)$ holds for at least one precomputed term $r$:
 $$
-% \top \,\rar\, \bigvee_{(1, r)\in A} p(r). 
-\top \,\rar\, \bigvee_r p(r). 
+\top \,\rar\, \bigvee_r p(r).
 $$
 
-
-If $L$ is an aggregate literal of the form $\no \; E$ where $E$ is an 
-aggregate atom then $\tau L $ is $\neg \tau E$; if $L$ is of the form
-$\no \; \no\; E$ then  $\tau L$ is $\neg \neg \tau E$.  
+For a closed aggregate atom $E$ of form \eqref{ag1} or \eqref{ag2},
+\begin{itemize}
+\item by $\tau E$ we denote the disjunction of formulas $\tau_t E$
+over all terms $t$ in~$[s]$;
+\item by $\tau (\no \; E)$ we denote the disjunction of formulas $\neg \tau_t E$
+over all terms $t$ in~$[s]$; and
+\item by $\tau (\no \; \no \; E)$ we denote the disjunction of formulas
+$\neg \neg \tau_t E$ over all terms $t$ in~$[s]$.
+\end{itemize}
+It is clear that if $[s]$ is a singleton set $\{t\}$, then $\tau E$ is (the
+disjunction containing only) $\tau_t E$.
+For a closed aggregate atom $E$ of form \eqref{ag3},
+\begin{itemize}
+\item by $\tau E$ we denote the disjunction of formulas $\tau_{t_1,t_2} E$
+over all pairs of precomputed terms $t_1, t_2$ such that $t_1$ in~$[s_1]$ and
+$t_2$ in~$[s_2]$;
+\item by $\tau(\no \; E)$ we denote the disjunction of formulas
+$\neg \tau_{t_1,t_2} E$ over all pairs of precomputed terms $t_1, t_2$ such
+that $t_1$ in~$[s_1]$ and $t_2$ in~$[s_2]$; and
+\item by $\tau(\no \; \no \; E)$ we denote the disjunction of formulas
+$\neg \neg \tau_{t_1,t_2} E$ over all pairs of precomputed terms $t_1, t_2$ such
+that $t_1$ in~$[s_1]$ and $t_2$ in~$[s_2]$.
+\end{itemize}
 
 \subsection{Semantics of Rules and Programs} \label{ssec:grules}
 
-For any rule~$R$ of form (\ref{rule3}), $\tau R$ stands for the set of the 
+For any rule~$R$ of form (\ref{rule3}), $\tau R$ stands for the set of the
 formulas
 $$
 \tau B_1\land\cdots\land\tau B_m\rar\tau_{\land} H_1\lor\cdots\lor\tau_{\land} H_k
 $$
 for all instances~(\ref{rule3}) of~$R$.
-For a rule of form (\ref{rule4}), $\tau R$ stands for the set of the 
+For a rule of form (\ref{rule4}), $\tau R$ stands for the set of the
 formulas
 $$
-\tau B_1\land\cdots\land\tau B_m\rar\tau C 
+\tau B_1\land\cdots\land\tau B_m\rar\tau C
 $$
 for all instances~(\ref{rule4}) of~$R$.
 For any program~$\Pi$, $\tau \Pi$ stands for the union of the sets
@@ -968,8 +999,8 @@ useful to simplify the formulas obtained by applying transformation~$\tau$ to
 its rules.  By simplifying an infinitary propositional formula we mean turning
 it into a strongly equivalent formula that has
 simpler syntactic structure.  The definition of strong equivalence,
-introduced by~\citeANP{lif01} \citeyear{lif01}, is extended to infinitary 
-formulas by~\citeANP{har15a} \citeyear{har15a}.  Corollary~1 from that paper 
+introduced by~\citeANP{lif01} \citeyear{lif01}, is extended to infinitary
+formulas by~\citeANP{har15a} \citeyear{har15a}.  Corollary~1 from that paper
 shows that the stable models of an infinitary formula are not
 affected by simplifying its parts.
 
@@ -990,10 +1021,11 @@ monotone when~$\prec$ is $<$ or $\leq$, and anti-monotone when~$\prec$ is
 $>$ or $\geq$.  It is the other way around if~$\alpha$ is {\it min}.
 
 Our semantics of aggregates is somewhat different from that adopted
-by \citeANP{har14a} \citeyear[Section~3.5]{har14a}, as explained in 
+by \citeANP{har14a} \citeyear[Section~3.5]{har14a}, as explained in
 Footnote~\ref{ft3} (and also
 in view of the difference in the treatment of variables discussed in
-Footnote~\ref{ft2}).  Nevertheless, the statements and proofs of the two 
+Footnote~\ref{ft2}, and the modification to the definition of ``justifies''
+explained in Footnote~\ref{ft3a}).  Nevertheless, the statements and proofs of the two
 theorems mentioned above remain essentially the same in the framework of AG. The
 theorems show that the antecedent in (\ref{agdef}) can be dropped if $E$
 is monotone, and that the consequent can be replaced by~$\bot$ if $E$ is
@@ -1003,50 +1035,47 @@ formulas.
 \subsection{Eliminating Equality from Aggregate Atoms}
 
 If~$\prec$ in an aggregate atom~(\ref{ag1}) is $=$ then the following
-proposition can be useful, in combination with the facts reviewed in
+theorem\footnote{The statement and proof of this theorem have been
+modified with respect to the original version of this paper in accordance
+with the change in the definition of ``justifies'' described in
+Footnote~\ref{ft3a}.}  can be useful, in combination with the facts reviewed in
 Section~\ref{sec:mon}:
 
 \begin{theorem}\label{lem:equality}
-Let $E$ be a closed aggregate atom of the form
+If $E$ is a closed aggregate atom of the form
 $$
 \alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}= s,
 $$
-where $s$ is an interval-free term.  If $E_{\le}$ is 
+%where $s$ is an interval-free term.
+$E_{\le}$ is
 $$
-\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\} \leq s
+\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}\leq s,
 $$
-and $E_{\ge}$ is 
-$$ 
-\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\} \geq s,
+and $E_{\ge}$ is
 $$
-then $\tau E$ is strongly equivalent to $\tau E_{\le} \land 
-\tau E_{\ge}$.
+\alpha\{{\bf t}_1 : {\bf L}_1\,;\ldots;\,{\bf t}_n : {\bf L}_n\}\geq s,
+$$
+then for any precomputed term $t$, $\tau_t E$ is strongly equivalent to $\tau_t E_{\le} \land
+\tau_t E_{\ge}$.
 \end{theorem}
-
-Without the assumption that~$s$
-is interval-free the assertion of Theorem~\ref{lem:equality} would be
-incorrect:
-if $E$ is ${\it count}\{a:p\} = (\overline 0..\overline 1)\times \overline 2$ then
-$\tau E$ is $p \rar \bot$, but each of the formulas $\tau E_{\leq}$,
-$\tau E_{\geq}$  is the empty conjunction~$\top$.  
 
 \subsection{Properties of Counting} \label{sec:count}
 
-For any set $S$, by $\lvert S \rvert$ we denote the cardinality of 
-$S$ if $S$ is finite, and $\infty$ otherwise. 
+For any set $S$, by $\lvert S \rvert$ we denote the cardinality of
+$S$ if $S$ is finite, and $\infty$ otherwise.
 
 \begin{theorem}\label{lem:geq}
 For any closed aggregate atom~$E$ of the form
 $$
 {\it count}\{{\bf t}_1 : {\bf L}_1; \dots ; {\bf t}_n : {\bf L}_n \} \geq \overline m
 $$
-where $m$ is an integer and each ${\bf t}_i$ is interval-free, $\tau E$ is 
-strongly equivalent to 
+where $m$ is an integer and each ${\bf t}_i$ is interval-free, $\tau E$ is
+strongly equivalent to
 \beq
-  \bigvee_{\Delta\subseteq A \atop \lvert [\Delta] \rvert = m}  
+  \bigvee_{\Delta\subseteq A \atop \lvert [\Delta] \rvert = m}
   \bigwedge_{(i,{\bf r}) \in \Delta}
   \tau_{\lor}(({\bf L}_i)^{{\bf x}_i}_{\bf r}).
-\eeq{trans_geq} 
+\eeq{trans_geq}
 \end{theorem}
 
 \begin{theorem}\label{lem:leq}
@@ -1054,30 +1083,30 @@ For any closed aggregate atom $E$ of the form
 $$
 {\it count}\{{\bf t}_1 : {\bf L}_1; \dots ; {\bf t}_n : {\bf L}_n \} \leq \overline m
 $$
-where $m$ is an integer and each ${\bf t}_i$ is interval-free, $\tau E$ is 
-strongly equivalent to 
+where $m$ is an integer and each ${\bf t}_i$ is interval-free, $\tau E$ is
+strongly equivalent to
 \beq
-  \bigwedge_{\Delta \subseteq A \atop \lvert [\Delta] \rvert = m+1}  \neg 
+  \bigwedge_{\Delta \subseteq A \atop \lvert [\Delta] \rvert = m+1}  \neg
   \bigwedge_{(i, {\bf r}) \in\Delta} \tau_{\lor}
   (({\bf L}_i)^{{\bf x}_i}_{\bf r}).
 \eeq{trans_leq}
 \end{theorem}
 
-Without the assumption that each ${\bf t}_i$ is interval-free the assertions 
+Without the assumption that each ${\bf t}_i$ is interval-free the assertions
 of the theorems would be incorrect. For instance, if $E$ is
 ${\it count}\{\overline 1..\overline 2:p\} \geq \overline 1$ then $\tau E$ is $\top \rar p$, and
-(\ref{trans_geq}) is~$\bot$. 
+(\ref{trans_geq}) is~$\bot$.
 
-In the special (but common) case when $E$ has the form 
+In the special (but common) case when $E$ has the form
 ${\it count}\{{\bf x}: {\bf L}\} \geq \overline m$,
-where ${\bf x}$ is a tuple of variables and each variable occurring in 
+where ${\bf x}$ is a tuple of variables and each variable occurring in
 ${\bf L}$ occurs also in ${\bf x}$,
 the condition $\lvert [\Delta] \rvert = m$ in (\ref{trans_geq})
 can be replaced by $\lvert \Delta \rvert = m$. Indeed, in this case
-$\Delta$ and $[\Delta]$ have the same cardinality because $[\Delta]$ 
-is the set of tuples ${\bf r}$ of terms such that $(1, {\bf r}) \in \Delta$. 
+$\Delta$ and $[\Delta]$ have the same cardinality because $[\Delta]$
+is the set of tuples ${\bf r}$ of terms such that $(1, {\bf r}) \in \Delta$.
 Similarly,  the condition $\lvert [\Delta] \rvert = m+1$ in (\ref{trans_leq})
-can be replaced by $\lvert \Delta \rvert = m+1$ if 
+can be replaced by $\lvert \Delta \rvert = m+1$ if
 $E$ has the form ${\it count}\{{\bf x}: {\bf L}\} \leq \overline m$.
 
 \section{Conclusion}
